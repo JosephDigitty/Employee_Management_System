@@ -8,11 +8,17 @@ import axios from "axios";
 const DepartmentList = () => {
     const [department , setdepartment] = useState([])
     const [depLoanding , setDepLoading] = useState(false)
+    const [filteredDepartments, setFilteredDepartments] = useState([])
+    const handleDeleted = async (id) => {
+        const data = department.filter((dep) => dep._id !== id)
+        setdepartment(data)
+      };
+    
     useEffect(() => {
         const fetchDepartments = async () => {
             setDepLoading(true)
             try {
-                const response = await axios.get("http://localhost:3000/api/department", {
+                const response = await axios.get("http://localhost:3001/api/department", {
                     headers: {
                         "Authorization" : `Bearer ${localStorage.getItem("token")}`
                     }
@@ -24,10 +30,12 @@ const DepartmentList = () => {
                             _id: department._id,
                             sno:sno++,
                             department_Name: department.department_Name,
-                            Action: (<DepartmentButtons _id={department._id}/>)
+                            Action: (<DepartmentButtons _id={department._id} handleDeleted={handleDeleted}/>)
                         }
                     ))
+
                     setdepartment(data)
+                    setFilteredDepartments(data)
                 }
                 const data = await response.json()
                 console.log(data)
@@ -43,6 +51,11 @@ const DepartmentList = () => {
         fetchDepartments()
     }, [])
 
+    const filterDepartments = (e) => {
+        const records = department.filter((dep) => dep.department_Name.toLowerCase().includes(e.target.value.toLowerCase()))
+        setFilteredDepartments(records)
+    }
+
     return (
          
         <>
@@ -54,13 +67,15 @@ const DepartmentList = () => {
             </h3>
         </div>
         <div className="flex justify-between items-center">
-            <input type="text" placeholder="Search by Dept name" className="px-4 py-0.5 border"/>
+            <input type="text" placeholder="Search by Dept name" className="px-4 py-0.5 border"
+            onChange={filterDepartments}
+            />
             <Link to="/admin-dashboard/add-new-department" className="px-4 py-1 bg-teal-600 text-white rounded">
                 Add New Department
             </Link>
         </div>
         <div className="mt-5">
-            <DataTable columns={columns} data={department} />
+            <DataTable columns={columns} data={filteredDepartments} pagination />
         </div>
 
         </div>

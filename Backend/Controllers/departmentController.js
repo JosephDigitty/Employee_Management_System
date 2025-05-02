@@ -26,6 +26,7 @@ const getAllDepartments = async (req, res) => {
    }
 }
 
+
 const getDepartment = async (req, res) => {
     try {
         const id = req.params.id
@@ -48,4 +49,18 @@ const editDepartment = async (req, res) => {
         res.status(500).json({success:false, error: "update department server error"})
     }
 }
-export  {addDepartment , getAllDepartments , getDepartment, editDepartment};
+const deleteDepartment = async (req, res) => {
+        try{
+            const id = req.params.id
+            const deletedDepartment = await Department.findByIdAndDelete(id);
+            if(!deletedDepartment) {
+                return res.status(404).json({success: false, messsage: "couldnt fine department"})
+            } 
+            res.status(200).json({success:true, message:`${deleteDepartment.department_Name} succesfully deleted`,deletedDepartment})
+
+        } catch (error) {
+            res.status(500).json({success:false, message:"error deleting department"})
+            console.log(error)
+        }
+}
+export  {addDepartment , getAllDepartments , getDepartment, editDepartment, deleteDepartment};

@@ -10,6 +10,9 @@ import Salaries from "./Component/Salaries";
 import Settings from "./Component/Settings";
 import AddDepartment from "./Component/Departments/AddDepartment";
 import EditDepartment from "./Component/Departments/EditDepartment";
+import AddEmployee from "./Component/Employee/AddEmployee";
+import EmployeeSingular from "./Component/Employee/Employee";
+import EditEmployee from "./Component/Employee/EditEmployee";
 
 
 const App = () => {
@@ -20,7 +23,10 @@ const App = () => {
       <Route path="/login" element={<Login />} />
       <Route path="/admin-dashboard" element={<AdminDashboard/>}> 
       <Route index element={<AdminSummarry/>}></Route>
-      <Route path="/admin-dashboard/emplooyees" element={<Employees/>}></Route>
+      <Route path="/admin-dashboard/employees" element={<Employees/>}></Route>
+      <Route path="/admin-dashboard/employees/:id" element={<EmployeeSingular/>}></Route>
+      <Route path="/admin-dashboard/edit-employees/:id" element={<EditEmployee/>}></Route>
+      <Route path="/admin-dashboard/add-employee" element={<AddEmployee/>}></Route>
       <Route path="/admin-dashboard/departments" element={<Department/>}></Route>
       <Route path="/admin-dashboard/leaves" element={<Leaves/>}></Route>
       <Route path="/admin-dashboard/salaries" element={<Salaries/>}></Route>

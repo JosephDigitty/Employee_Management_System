@@ -1,7 +1,9 @@
+import AddSalary from "./Salary/AddSalary";
+
 const Salaries  = ( ) => {
     return ( 
         <div>
-            Salaries
+            <AddSalary/>
         </div>
      );
 }

@@ -14,7 +14,7 @@ const AdminSidebar= () => {
                   <span>Dashboard</span>
                 </div>
                 </NavLink>
-                <NavLink to="/admin-dashboard/emplooyees">
+                <NavLink to="/admin-dashboard/employees">
                 <div className="flex space-x-4 px-4 py-3 mx-1.5 hover:ml-4 items-center rounded hover:bg-teal-500 transform transition-all ease-in-out duration-700">
                   <FaUser/>
                   <span>Employee</span>
