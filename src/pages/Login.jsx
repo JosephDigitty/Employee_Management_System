@@ -12,7 +12,7 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
-            const response = await axios.post("http://localhost:3000/api/auth/login",
+            const response = await axios.post("http://localhost:3001/api/auth/login",
                 {
                     email,
                     password
@@ -25,7 +25,7 @@ const Login = () => {
                     navigate("/admin-dashboard")
                     console.log(response)
                 } else {
-                    navigate("employee-dashboard")
+                    navigate("/employee-dashboard")
                 }
             }
         } catch (error) {

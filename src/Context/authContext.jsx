@@ -3,10 +3,12 @@ import axios from "axios";
 import { createContext, useContext, useEffect } from "react";
 import { useState } from "react";
 
+
 const userContext = createContext()
 
 const AuthContext  = ({children}) => {
    
+
     const [loading, setLoading] = useState(true)
     const [user, setUser] = useState(null)
     useEffect(() => {
@@ -27,7 +29,6 @@ const AuthContext  = ({children}) => {
                 }
                 else {
                     setUser(null)
-                    
                 }
                     
             } catch (error) {
@@ -46,7 +47,6 @@ const AuthContext  = ({children}) => {
     } else {
       verifyUser();
     }
-    
     }, [])
     const login = (user) => {
         setUser(user)

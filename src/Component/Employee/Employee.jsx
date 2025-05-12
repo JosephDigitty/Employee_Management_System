@@ -39,7 +39,7 @@ const EmployeeSingular = () => {
               <h2 className="text-2xl font-bold mb-8 text-center">Employee Details</h2>
              <div className="flex gap-6 items-center">
              <div>
-                  <img src={`http://localhost:3000/uploads/${employee.userId.profileImage}`} alt="" 
+                  <img src={`http://localhost:3001/uploads/${employee.userId.profileImage}`} alt="" 
                   className="rounded-full border w-50 h-50"
                   />
               </div>
@@ -63,7 +63,7 @@ const EmployeeSingular = () => {
               </div>
               <div className="flex space-x-3 mb-5">
                   <p className="text-lg font-bold">Department:</p>
-                  <p className="font-medium">{employee.department.department_name}</p>
+                  <p className="font-medium">{employee.department.department_Name}</p>
               </div>
               <div className="flex space-x-3 mb-5">
                   <p className="text-lg font-bold">Marital Status</p>

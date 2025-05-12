@@ -61,13 +61,14 @@ export const fetchDepartments = async () => {
 export const getEmployees = async (id) => {
     let employees
     try {
-        const response = await axios.get(`http://localhost:3001/api/employee/depatment/${id}`, {
+        const response = await axios.get(`http://localhost:3001/api/employee/department/${id}`, {
             headers: {
                 "Authorization" : `Bearer ${localStorage.getItem("token")}`
             }
         })
+        console.log(response)
         if(response.data.success) {
-            employees = await response.data.departments
+            employees = await response.data.employees
         }
         const data = await response.data
         console.log(data)
@@ -77,7 +78,7 @@ export const getEmployees = async (id) => {
         }
         console.log(error)
     } 
-    return departments
+    return employees
 }
 
 export const EmployeeButtons = ({ id }) => {
@@ -116,7 +117,9 @@ export const EmployeeButtons = ({ id }) => {
         >
           Edit
         </button>
-        <button className="bg-yellow-600 px-3 py-1 rounded-sm" >
+        <button className="bg-yellow-600 px-3 py-1 rounded-sm"
+        onClick={() => Navigate(`/admin-dashboard/employee/salary/${id}`)}
+        >
           Salary
         </button>
         <button className="bg-red-600 px-3 py-1 rounded-sm" >

@@ -78,10 +78,10 @@ const getAllEmployee =  async (req, res) => {
 const getEmployee = async (req, res) => {
     try {
         const id = req.params.id
-    
-        const employee = await Employee.findById(id).populate("userId", {password: 0}).populate("department")
+        let employee;
+        employee = await Employee.findById(id).populate("userId", {password: 0}).populate("department")
         if (!employee) {
-            return res.status(404).json({ success: false, error: "Employee not found" });
+           employee = await Employee.findOne({ userId: id}).populate("userId", {password: 0}).populate("department")
         }
         res.status(200).json({success: true, employee})
     } catch (error) {
@@ -89,6 +89,7 @@ const getEmployee = async (req, res) => {
         res.status(500).json({success:false, error: "fetch employee server error"})
     }
 }
+
 const editEmployee = async (req, res) => {
     try {
         const {id} = req.params
@@ -119,4 +120,17 @@ const editEmployee = async (req, res) => {
     }
 }
 
-export {addEmployee, upload, getAllEmployee, getEmployee, editEmployee} 
+ const getEmployeesByDepartment = async (req, res) => {
+    try {
+        const id = req.params.id
+    
+        const employees = await Employee.find({department: id}).populate("userId", "name")
+          
+        res.status(200).json({success: true, employees})
+    } catch (error) {
+        console.error("Error fetching employee by Id:", error);
+        res.status(500).json({success:false, error: "fetch employee server error"})
+    }
+ }
+
+export {addEmployee, upload, getAllEmployee, getEmployee, editEmployee, getEmployeesByDepartment} 
