@@ -18,6 +18,8 @@ import PrivateRoutes from "./utils/PrivateRoutes";
 import RoleBasedRoutes from "./utils/RoleBasedRoutes";
 import EmployeeDetails from "./EmployeeDashBoard/EmployeeDetail";
 import EmployeeProfile from "./EmployeeDashBoard/EmployeeProfile";
+import EmployeeLeaves from "./Leaves/List";
+import AddLeave from "./Leaves/AddLeaves";
 
 
 const App = () => {
@@ -43,6 +45,8 @@ const App = () => {
       <Route path="/employee-dashboard" element={<EmployeeDashboard/>}>
       <Route index element={<EmployeeDetails/>}></Route>
       <Route path="/employee-dashboard/profile/:id" element={<EmployeeSingular/>}></Route>
+      <Route path="/employee-dashboard/leaves" element={<EmployeeLeaves/>}></Route>
+      <Route path="/employee-dashboard/add-leave" element={<AddLeave/>}></Route>
       </Route>
     </Routes>
     </BrowserRouter>

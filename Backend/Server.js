@@ -7,6 +7,7 @@ import router from './routes/auth.js'
 import departmentRouter from './routes/department.js'
 import EmployeeRouter from './routes/employeeRoutes.js'
 import SalaryRouter from './routes/salary.js'
+import LeaveRouter from './routes/leave.js'
 import verifyUser from './middleware/authMiddleware.js'
 import path from 'path';
 
@@ -19,6 +20,7 @@ app.use('/api/auth', router)
 app.use('/api/department',departmentRouter)
 app.use('/api/employee',EmployeeRouter)
 app.use('/api/salary', SalaryRouter)
+app.use('/api/leave', LeaveRouter)
 
 app.use('/uploads', express.static(path.join(path.resolve(), 'public/uploads')));
 
