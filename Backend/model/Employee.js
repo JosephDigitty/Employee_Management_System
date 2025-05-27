@@ -11,7 +11,11 @@ const employeeSchema = new mongoose.Schema({
     maritalStatus:{type: String, required: true},
     designation:{type: String, required: true},
     department: {type: Schema.Types.ObjectId, ref: 'Department', required: true},
-    salary: {type: Number, required: true},
+    grade: { type: Schema.Types.ObjectId, ref: 'Grade', required: true },
+    salaryModifiers: {
+    allowances: [{label: { type: String },amount: { type: Number },},],
+    deductions: [{label: { type: String },amount: { type: Number },},],
+    },
     createdAt: {type: Date, default:Date.now},
     updatedAt: {type: Date, default:Date.now},
 })

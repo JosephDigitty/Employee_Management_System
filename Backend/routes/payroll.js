@@ -1,10 +1,11 @@
 import express from 'express'
 import authMiddleware from "../middleware/authMiddleware.js"
-import { addSalary, getSalary } from '../Controllers/salaryContollers.js'
+
+import { upsertPayroll } from '../Controllers/payrollContollers.js'
 const router = express.Router()
 
-router.post('/add', addSalary)
-router.get('/:id', getSalary)
+router.put('/:id/payroll', upsertPayroll)
+
 
 
 export default router

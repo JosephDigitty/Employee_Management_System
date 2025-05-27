@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import { fetchDepartments } from "../../utils/EmployeeHelper";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { fetchGrade } from "../../utils/GradeHelpers";
 
 const AddEmployee = () => {
     const navigate = useNavigate()
-    const [deparments, setdepartments] = useState([])
+    const [departments, setdepartments] = useState([])
+    const [grades, setGrades] = useState([])
     const [formData, setFormData] = useState({
     })
     useEffect(() => {
@@ -14,7 +16,15 @@ const AddEmployee = () => {
         setdepartments(departments)
         }
         getDepartments()
-        console.log(deparments)
+        console.log(departments)
+    }, [])
+    useEffect(() => {
+        const getGrade = async () => {
+            const grades = await fetchGrade()
+        setGrades(grades)
+        }
+        getGrade()
+        console.log(grades)
     }, [])
         const handleChange = (e) => {
             const {name ,value, files} = e.target
@@ -24,6 +34,14 @@ const AddEmployee = () => {
                 setFormData((prevData) => ({...prevData, [name]: value}))
             }
         }
+        useEffect(() => {
+            console.log(grades)
+        }, [grades])
+        useEffect(() => {
+            console.log(departments)
+        }, [departments])
+         const submissionData = new FormData();
+         submissionData.append("grade", formData.grade);
         const handleSubmit = async(e) => {
             e.preventDefault()
             // Add department to the database
@@ -141,21 +159,21 @@ const AddEmployee = () => {
                     <label name="department" className="block text-sm font-medium text-gray-700"> Department </label>
                     <select name="department" onChange={handleChange} className="mt-1 p-2 block w-full border rounded-md border-gray-300" required>
                         <option value="">Select Department</option>
-                        {deparments.map((dep) => (
+                        {departments.map((dep) => (
                             <option key={dep._id} value={dep._id}>{dep.department_Name}</option>
                         ))}
                     </select>
                 </div>
-                {/* salary */}
+                {/* grade*/}
                 <div>
-                    <label className="block text-sm font-medium text-gray-700"> Salary </label>
-                    <input type="number" 
-                    name="salary"
-                    onChange={handleChange}
-                    placeholder="Insert Salary"
-                    className="mt-1 p-2 block w-full border rounded-md border-gray-300" 
-                    required/>
-                </div>
+                    <label name="grade" className="block text-sm font-medium text-gray-700"> Grade </label>
+                    <select name="grade" onChange={handleChange} className="mt-1 p-2 block w-full border rounded-md border-gray-300" required>
+                        <option value="">Select Grade</option>
+                        {grades.map((grd) => (
+                            <option key={grd._id} value={grd._id}>{grd.gradeName}</option>
+                        ))}
+                    </select>
+                </div>        
                 {/* password */}
                 <div>
                     <label className="block text-sm font-medium text-gray-700"> Password </label>

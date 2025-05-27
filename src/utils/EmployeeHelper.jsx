@@ -46,10 +46,9 @@ export const fetchDepartments = async () => {
             }
         })
         if(response.data.success) {
-            departments = await response.data.departments
+           return response.data.departments
         }
-        const data = await response.data
-        console.log(data)
+        
     } catch (error) {
         if(error.response && !error.response.data.success) {
             alert(error.response.data.error)
@@ -118,7 +117,7 @@ export const EmployeeButtons = ({ id }) => {
           Edit
         </button>
         <button className="bg-yellow-600 px-3 py-1 rounded-sm"
-        onClick={() => Navigate(`/admin-dashboard/employee/salary/${id}`)}
+        onClick={() => Navigate(`/admin-dashboard/employee/salary-modify/${id}`)}
         >
           Salary
         </button>
