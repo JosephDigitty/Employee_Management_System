@@ -22,6 +22,9 @@ import EmployeeLeaves from "./Leaves/List";
 import AddLeave from "./Leaves/AddLeaves";
 import AddGrades from "./Component/Grades/AddGrades";
 import SalaryModifiers from "./Component/Salary/SalaryModifiers";
+import UpdateTempoarySalaryModifiers from "./Component/Payroll/UpdateTemporarymodi";
+import PayrollDashboard from "./Component/Payroll/PayrollDashboard";
+import EmployeeTemporary from "./Component/Payroll/EmployeeTemporary";
 
 
 const App = () => {
@@ -41,6 +44,9 @@ const App = () => {
       <Route path="/admin-dashboard/departments" element={<Department/>}></Route>
       <Route path="/admin-dashboard/leaves" element={<Leaves/>}></Route>
       <Route path="/admin-dashboard/salaries" element={<Salaries/>}></Route>
+      <Route path="/admin-dashboard/payrolls/modifiers/temporary" element={<EmployeeTemporary/>}></Route>
+      <Route path="/admin-dashboard/payroll" element={<PayrollDashboard/>}></Route>
+      <Route path="/admin-dashboard/payrolls/temporary/modiefiers/:id" element={<UpdateTempoarySalaryModifiers/>}></Route>
       <Route path="/admin-dashboard/settings" element={<Settings/>}></Route>
       <Route path="/admin-dashboard/add-new-department" element={<AddDepartment/>}></Route>
       <Route path="/admin-dashboard/departments/:id" element={<EditDepartment/>}></Route>

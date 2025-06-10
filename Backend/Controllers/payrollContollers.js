@@ -1,3 +1,4 @@
+import { data } from "react-router-dom"
 import Employee from "../model/Employee.js"
 import Grade from "../model/Grade.js"
 import Payroll from "../model/Payroll.js"
@@ -204,7 +205,7 @@ const getallPayrollByDepartment = async () => {
         for (i = 0; i < payrolls.length; i++) {
             if (payrolls[i].employeeId.department.department_id.toString() === department) {
                 filteredPayrollByDepartment.push(payrolls[i])
-            }
+            }filteredPayrollByDepartment
         }
 
         if(!filteredPayrollByDepartment) {
@@ -212,7 +213,7 @@ const getallPayrollByDepartment = async () => {
         }
         
         
-        res.status(200).json({success: true, filteredPayrollByDepartment})
+        res.status(200).json({success: true, })
     } catch (error) {
         console.log(error)
         res.status(500).json({success:false, error:"fetch Payroll server Error"}) 
@@ -301,4 +302,72 @@ const getAllPayroll = async () => {
         res.status(500).json({success:false, error:"fetch Payroll server Error"})
     }
 }
-export  {upsertPayroll, addPermSalarModifiers, generateDefaultPayroll, getallPayrollByDepartment, getallPayrollByGrade, getAllPayroll }
+
+const getPermanentSalaryModifiers = async () => {
+    try {
+        const id = req.params.id
+        const employee = await Employee.findById(id)
+        if (!employee) {
+           return res.status(404).json({success: false, error: "employee is not found"})
+        }
+        const {allowances, deductions} = employee.salaryModifiers
+        res.status(200).json({success: true, message: "Update Salary Modifiers True", salaryModifiers})
+    } catch {
+        res.status(500).json({success: false, error: "Server Error"})
+        console.log(error)
+    }
+}
+
+const editPermanentSalaryModifiers = async (req, res) => {
+    try {
+        const {id: employeeId, allowances, deductions} = req.body
+
+    const employee = await Employee.findOne({employeeId})
+    employee.salaryModifiers.allowances = allowances
+    employee.salaryModifiers.deductions = deductions
+    await employee.save()
+    res.status(200).json({success: true, message: "Permanent Salary Modifiers has been updated"}, employee)
+    } catch (error) {
+        res.status(500).json({success: false, error: "Server Error"})
+        console.log(error)
+    }
+
+}
+
+const getTempoarySalaryModifiers = async () => {
+    try {
+        const {payDate} = req.body
+        const { id: employeeId } = req.params;
+        const period = new Date(payDate).toISOString().slice(0, 7)
+        const payroll = await Payroll.findById(employeeId, period)
+        if (!payroll) {
+            res.status(404).json({success: false, error: "employee is not found"})
+        }
+        const {oneTimeAllowances, oneTimeDeductions} = payroll
+        res.status(200).json({success: true, data : {oneTimeAllowances, oneTimeDeductions}})
+    } catch (error) {
+        res.status(500).json({success: false, error: "Server Error"})
+        console.log(error)
+    }
+}
+
+
+const editTempoarySalaryModifiers = async (req, res) => {
+    try {
+        const {id: employeeId, allowances, deductions, payDate} = req.body
+        const period = new Date(payDate).toISOString().slice(0, 7)
+        const payroll = await Payroll.findOne({employeeId, period })
+        payroll.oneTimeAllowances = allowances
+        payroll.oneTimeDeduction = deductions
+        await payroll.save()
+        res.status(200).json({success: true, message: "Temporary Salary Modifiers has been updated"})
+    } catch {
+        res.status(500).json({success: false, error: "Server Error"})
+        console.log(error)
+    }
+}
+export  {
+    upsertPayroll, addPermSalarModifiers, generateDefaultPayroll, getallPayrollByDepartment, 
+    getallPayrollByGrade, getAllPayroll, editPermanentSalaryModifiers,
+    getPermanentSalaryModifiers, getTempoarySalaryModifiers, editTempoarySalaryModifiers
+} 

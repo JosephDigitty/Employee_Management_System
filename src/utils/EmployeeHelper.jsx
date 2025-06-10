@@ -128,3 +128,50 @@ export const EmployeeButtons = ({ id }) => {
     );
   };
 
+  export const PayrollButtons = ({ id }) => {
+    const Navigate = useNavigate();
+    const handleDelete = async () => {
+      try {
+        const response = await axios.delete(`http://localhost:3000/api/employee/${id}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+  
+        if (response.data.success) {
+          // Notify parent component (DepartmentList) to remove the deleted department
+          handleDeleted(_id);
+        } else {
+          alert("Error deleting department");
+        }
+      } catch (error) {
+        console.log("Error deleting department:", error);
+        alert("Error deleting department");
+      }
+    };
+  
+    return (
+      <div className="flex gap-3 text-white">
+        <button
+          className="bg-teal-600 px-3 py-1 rounded-sm"
+          onClick={() => Navigate(`/admin-dashboard/payrolls/temporary/modiefiers/${id}`)}
+        >
+          Temporary Salary
+        </button>
+        <button className="bg-blue-600 px-3 py-1 rounded-sm" 
+        onClick={() => Navigate(`/admin-dashboard/edit-employees/${id}`)}
+        >
+          Edit
+        </button>
+        <button className="bg-yellow-600 px-3 py-1 rounded-sm"
+        onClick={() => Navigate(`/admin-dashboard/employee/salary-modify/${id}`)}
+        >
+          Salary
+        </button>
+        <button className="bg-red-600 px-3 py-1 rounded-sm" >
+          Leave
+        </button>
+      </div>
+    );
+  };
+
