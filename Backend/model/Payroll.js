@@ -19,7 +19,7 @@ const payrollSchema = new mongoose.Schema({
             amount: { type: Number },
         },
     ],
-    oneTimeDeduction: [
+    oneTimeDeductions: [
         {
             label: { type: String },
             amount: { type: Number },

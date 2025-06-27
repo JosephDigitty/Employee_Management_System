@@ -7,21 +7,26 @@ const UpdateTempoarySalaryModifiers = ({payDate}) => {
 
     const {id : employeeId} = useParams()
     const [formData, setFormData] = useState({
-        allowances: [{label: "", amount: ""}],
-        deductions: [{label: "", amount: ""}],
-    })
-
+    allowances: [],
+    deductions: [],
+    });
     useEffect(() => {
         const fetchSalaryModifiers = async () => {
-            const result = await getTemporaryModifiers(employeeId, payDate)
+            const result = await getTemporaryModifiers(employeeId)
             if(result) {
-                setFormData(result)
+                console.log(result)
+                setFormData({
+                    allowances: result.allowances,
+                    deductions: result.deductions,
+                });
+            }else {
+                console.log("result not found")
             }
         } 
-        if (employeeId && payDate) {
+        if (employeeId) {
             fetchSalaryModifiers()
         }
-    },[employeeId, payDate])
+    },[employeeId])
 
     const handleChange = ({type, index, field, value}) => {
         const updated = [...formData[type]]
@@ -41,24 +46,15 @@ const UpdateTempoarySalaryModifiers = ({payDate}) => {
         })
     }
     
+    // 
     const removeField = (type, index) => {
-        let updated = []
-        for(let i = 0; i < formData.length; i++) {
-            if(i !== index) {
-                updated.push(formData[type][i])
-            }
-        }
-        setFormData({ formData, [type]: updated })
-    }
+    const updated = formData[type].filter((_, i) => i !== index);
+    setFormData({ ...formData, [type]: updated });
+    };
 
      const handleDateChange = async (e) => {
         e.preventDefault()
-        const data = await getTemporaryModifiers()({
-            id: employeeId, 
-            payDate, 
-            allowances:formData.allowances,
-            deductions:formData.deductions
-        })
+        const data = await getTemporaryModifiers(employeeId);
 
         if(data) {
             alert("Salary Modiefiers has been updated sucessfully")
@@ -91,8 +87,22 @@ const UpdateTempoarySalaryModifiers = ({payDate}) => {
                         onChange={(e) =>
                             handleChange("deductions", index, "label", e.target.value)}
                         />
+                        <button
+                        type="button"
+                        className="px-4 py-2 bg-red-500 text-white rounded"
+                        onClick={() => removeField("allowances", index)}
+                        >
+                        Remove
+                        </button>
                     </div>
                 ))}
+                <button
+                        type="button"
+                        className="px-4 py-2 bg-green-500 text-white rounded"
+                        onClick={() => addNewField("allowances")}
+                        >
+                            + Add Allowance
+                    </button>
             </div>
             <div>
                 <h2 className="text-lg font-semibold">
@@ -112,8 +122,22 @@ const UpdateTempoarySalaryModifiers = ({payDate}) => {
                         onChange={(e) =>
                             handleChange("deductions", index, "label", e.target.value)}
                         />
+                        <button
+                        type="button"
+                        className="px-4 py-2 bg-red-500 text-white rounded"
+                        onClick={() => removeField("deductions", index)}
+                        >
+                        Remove
+                        </button>
                     </div>
                 ))}
+                    <button
+                        type="button"
+                        className="px-4 py-2 bg-green-500 text-white rounded"
+                        onClick={() => addNewField("deductions")}
+                        >
+                            + Deductions
+                    </button>
             </div>
         </form>
      );

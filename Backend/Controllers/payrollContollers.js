@@ -1,4 +1,5 @@
-import { data } from "react-router-dom"
+
+import mongoose from "mongoose"
 import Employee from "../model/Employee.js"
 import Grade from "../model/Grade.js"
 import Payroll from "../model/Payroll.js"
@@ -104,7 +105,7 @@ const upsertPayroll =  async (req, res) => {
             payroll.permAllowances = permAllowances;
             payroll.permDeductions = permDeductions;
             payroll.oneTimeAllowances = allowances;
-            payroll.oneTimeDeduction = deductions;
+            payroll.oneTimeDeductions = deductions;
             payroll.totalEarnings = totalEarnings;
             payroll.totalDeductions = totalDeductions;
             payroll.netSalary = netSalary;
@@ -334,19 +335,19 @@ const editPermanentSalaryModifiers = async (req, res) => {
 
 }
 
-const getTempoarySalaryModifiers = async () => {
+const getTempoarySalaryModifiers = async (req, res) => {
     try {
-        const {payDate} = req.body
-        const { id: employeeId } = req.params;
-        const period = new Date(payDate).toISOString().slice(0, 7)
-        const payroll = await Payroll.findById(employeeId, period)
+        
+        const { employeeId } = req.params;
+        const id = new mongoose.Types.ObjectId(employeeId);
+        const payroll = await Payroll.findOne({employeeId: id}).sort({ period: -1 })
         if (!payroll) {
-            res.status(404).json({success: false, error: "employee is not found"})
+           return res.status(404).json({success: false, error: "payroll not found"})
         }
-        const {oneTimeAllowances, oneTimeDeductions} = payroll
-        res.status(200).json({success: true, data : {oneTimeAllowances, oneTimeDeductions}})
+        const {oneTimeAllowances: allowances = [], oneTimeDeductions: deductions = []} = payroll
+        res.status(200).json({success: true, data : {allowances, deductions}})
     } catch (error) {
-        res.status(500).json({success: false, error: "Server Error"})
+        console.error("Error fetching temporary salary modifiers:", error);
         console.log(error)
     }
 }
@@ -354,14 +355,17 @@ const getTempoarySalaryModifiers = async () => {
 
 const editTempoarySalaryModifiers = async (req, res) => {
     try {
-        const {id: employeeId, allowances, deductions, payDate} = req.body
-        const period = new Date(payDate).toISOString().slice(0, 7)
-        const payroll = await Payroll.findOne({employeeId, period })
+        const {employeeId, allowances, deductions} = req.body
+        const id = new mongoose.Types.ObjectId(employeeId);
+        const payroll = await Payroll.findOne({employeeId:id})
+        if (!payroll) {
+            return res.status(404).json({ success: false, error: "Payroll not found" });
+        }
         payroll.oneTimeAllowances = allowances
-        payroll.oneTimeDeduction = deductions
+        payroll.oneTimeDeductions = deductions
         await payroll.save()
         res.status(200).json({success: true, message: "Temporary Salary Modifiers has been updated"})
-    } catch {
+    } catch (error) {
         res.status(500).json({success: false, error: "Server Error"})
         console.log(error)
     }
